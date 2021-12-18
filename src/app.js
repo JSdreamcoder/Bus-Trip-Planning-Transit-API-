@@ -17,8 +17,9 @@ const button = document.getElementsByClassName('plan-trip')[0];
 const myTripEl = document.getElementsByClassName('my-trip')[0];
 let destinationSelected = [];
 let startSelected = [];
-//originListEl.innerHTML = '';
-//destinationListEl.innerHTML = '';
+originListEl.innerHTML = '';
+destinationListEl.innerHTML = '';
+myTripEl.innerHTML = '';
 // API require '%20' as a space
 const changeStringForApi = (string) => {
   return string.split(' ').join('%20');
