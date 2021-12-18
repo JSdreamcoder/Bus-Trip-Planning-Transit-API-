@@ -1,6 +1,8 @@
 const apiKey =
   'pk.eyJ1IjoiamFld29uLWh3YW5nIiwiYSI6ImNreGFheGg2djNtbnkycG82OTRycW4wam0ifQ.3k423OSsVZVvpMVX8b6mLQ';
+const tripApi = 'hlx1YImqHoyQm8GTRovJ';
 const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
+const tripUrl = 'https://api.winnipegtransit.com/v2/trip-planner.json?';
 const options =
   'bbox=-97.325875,49.766204,-96.953987,49.99275&autocomplete=true&fuzzyMatch=true&limit=10';
 const startingLocationEl = document.querySelector(
@@ -11,6 +13,9 @@ const destinationEl = document.querySelector(
 );
 const originListEl = document.getElementsByClassName('origins')[0];
 const destinationListEl = document.getElementsByClassName('destinations')[0];
+const button = document.getElementsByClassName('plan-trip')[0];
+let destinationSelected = [];
+let startSelected = [];
 //originListEl.innerHTML = '';
 //destinationListEl.innerHTML = '';
 // API require '%20' as a space
@@ -64,12 +69,25 @@ const renderLocations = (starting, index) => {
     });
 };
 
-const selectOrigine = (e) => {
+const renderPlan = (start, destination) => {
+  fetch(
+    `${tripUrl}api-key=${tripApi}&origin=geo/${start[0]},${start[1]}&destination=geo/${destination[0]},${destination[1]}`
+  )
+    .then((response) => response.json())
+    .then((data) => data.plans[0])
+    .then((plan) => {});
+};
+
+const selectOrigin = (e) => {
   let countList = originListEl.childElementCount;
   for (let i = 0; i < countList; i++) {
     originListEl.children[i].classList.remove('selected');
   }
   e.target.closest('li').classList.add('selected');
+  return (startSelected = [
+    e.target.closest('li').dataset.lat,
+    e.target.closest('li').dataset.long,
+  ]);
 };
 
 const selectDestination = (e) => {
@@ -78,8 +96,17 @@ const selectDestination = (e) => {
     destinationListEl.children[i].classList.remove('selected');
   }
   e.target.closest('li').classList.add('selected');
+  return (destinationSelected = [
+    e.target.closest('li').dataset.lat,
+    e.target.closest('li').dataset.long,
+  ]);
 };
 
 addEventListener('keydown', getLocations);
-originListEl.addEventListener('click', selectOrigine);
+originListEl.addEventListener('click', selectOrigin);
 destinationListEl.addEventListener('click', selectDestination);
+addEventListener('click', (e) => {
+  if (e.target === button) {
+    renderPlan(startSelected, destinationSelected);
+  }
+});
