@@ -15,6 +15,7 @@ const originListEl = document.getElementsByClassName('origins')[0];
 const destinationListEl = document.getElementsByClassName('destinations')[0];
 const button = document.getElementsByClassName('plan-trip')[0];
 const myTripEl = document.getElementsByClassName('my-trip')[0];
+//for store selected location
 let destinationSelected = [];
 let startSelected = [];
 originListEl.innerHTML = '';
@@ -120,6 +121,7 @@ const renderPlan = (start, destination) => {
 
 const selectOrigin = (e) => {
   let countList = originListEl.childElementCount;
+  //remove previous selected
   for (let i = 0; i < countList; i++) {
     originListEl.children[i].classList.remove('selected');
   }
@@ -132,6 +134,7 @@ const selectOrigin = (e) => {
 
 const selectDestination = (e) => {
   let countList = destinationListEl.childElementCount;
+  //remove previous selected
   for (let i = 0; i < countList; i++) {
     destinationListEl.children[i].classList.remove('selected');
   }
