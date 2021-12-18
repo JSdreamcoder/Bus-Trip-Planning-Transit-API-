@@ -14,6 +14,7 @@ const destinationEl = document.querySelector(
 const originListEl = document.getElementsByClassName('origins')[0];
 const destinationListEl = document.getElementsByClassName('destinations')[0];
 const button = document.getElementsByClassName('plan-trip')[0];
+const myTripEl = document.getElementsByClassName('my-trip')[0];
 let destinationSelected = [];
 let startSelected = [];
 //originListEl.innerHTML = '';
@@ -74,8 +75,46 @@ const renderPlan = (start, destination) => {
     `${tripUrl}api-key=${tripApi}&origin=geo/${start[0]},${start[1]}&destination=geo/${destination[0]},${destination[1]}`
   )
     .then((response) => response.json())
-    .then((data) => data.plans[0])
-    .then((plan) => {});
+    .then((data) => data.plans[0].segments)
+    .then((segments) => {
+      console.log(segments);
+      myTripEl.innerHTML = '';
+
+      segments.forEach((el, index) => {
+        if (index === segments.length - 1) {
+          myTripEl.insertAdjacentHTML(
+            'beforeend',
+            `<li>
+          <i class="fas fa-walking" aria-hidden="true"></i>Walk for ${el.times.durations.total} minutes
+          to Your Destination
+        </li>`
+          );
+        } else if (el.type === 'walk') {
+          myTripEl.insertAdjacentHTML(
+            'beforeend',
+            `<li>
+          <i class="fas fa-walking" aria-hidden="true"></i>Walk for ${el.times.durations.total} minutes
+          to stop #${el.to.stop.key} - ${el.to.stop.name}
+        </li>`
+          );
+        } else if (el.type === 'ride') {
+          myTripEl.insertAdjacentHTML(
+            'beforeend',
+            `<li>
+          <i class="fas fa-bus" aria-hidden="true"></i>Ride the ${el.route.name} for ${el.times.durations.total} minutes.
+        </li>`
+          );
+        } else if (el.type === 'transfer') {
+          myTripEl.insertAdjacentHTML(
+            'beforeend',
+            `<li>
+          <i class="fas fa-ticket-alt" aria-hidden="true"></i>Transfer from stop
+          #${el.from.stop.key} -${el.from.stop.name} to stop #${el.to.stop.key} - ${el.to.stop.name}
+        </li>`
+          );
+        }
+      });
+    });
 };
 
 const selectOrigin = (e) => {
