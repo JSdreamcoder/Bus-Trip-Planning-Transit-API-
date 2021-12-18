@@ -48,7 +48,7 @@ const renderLocations = (starting, index) => {
     .then((response) => response.json())
     .then((data) => data.features)
     .then((features) => {
-      console.log(features);
+      //console.log(features);
       if (index === 1) {
         originListEl.innerHTML = '';
       } else {
@@ -85,9 +85,15 @@ const renderPlan = (start, destination) => {
       console.log(data.plans);
       for (let i = 0; i < data.plans.length; i++) {
         if (i === 0) {
-          myTripEl.insertAdjacentHTML('beforeend', `<h3>Recommend Trip</h3>`);
+          myTripEl.insertAdjacentHTML(
+            'beforeend',
+            `<h3>Recommend Trip : ${data.plans[i].times.durations.total}min</h3>`
+          );
         } else {
-          myTripEl.insertAdjacentHTML('beforeend', `<h3>Alternative Trip</h3>`);
+          myTripEl.insertAdjacentHTML(
+            'beforeend',
+            `<h3>Alternative Trip : ${data.plans[i].times.durations.total}min</h3>`
+          );
         }
 
         data.plans[i].segments.forEach((el, index) => {
