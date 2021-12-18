@@ -73,6 +73,9 @@ const renderLocations = (starting, index) => {
 };
 
 const renderPlan = (start, destination) => {
+  if (startSelected[0] === undefined || destinationSelected[0] === undefined) {
+    return alert('You need starting Location and Destination');
+  }
   fetch(
     `${tripUrl}api-key=${tripApi}&origin=geo/${start[0]},${start[1]}&destination=geo/${destination[0]},${destination[1]}`
   )
@@ -149,6 +152,8 @@ addEventListener('keydown', getLocations);
 originListEl.addEventListener('click', selectOrigin);
 destinationListEl.addEventListener('click', selectDestination);
 addEventListener('click', (e) => {
+  console.log(typeof startSelected[0]);
+
   if (e.target === button) {
     renderPlan(startSelected, destinationSelected);
   }
